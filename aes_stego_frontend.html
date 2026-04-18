@@ -1,0 +1,730 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', var(--font-sans);
+  }
+
+  body, .root { font-family: var(--sans); }
+
+  .shell {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    position: relative;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 4px 12px;
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: 100px;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #1D9E75;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  h1 span { color: #1D9E75; }
+
+  .subtitle {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+    margin-top: 8px;
+  }
+
+  .flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .flow-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .flow-icon {
+    width: 36px; height: 36px;
+    border-radius: var(--border-radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    border: 0.5px solid var(--color-border-tertiary);
+    background: var(--color-background-secondary);
+  }
+
+  .flow-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .flow-arrow {
+    font-family: var(--mono);
+    color: var(--color-text-tertiary);
+    font-size: 12px;
+    padding: 0 4px;
+    margin-top: -12px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 4px;
+    margin-bottom: 1.5rem;
+  }
+
+  .tab {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: var(--border-radius-md);
+    border: none;
+    background: transparent;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.04em;
+  }
+
+  .tab.active {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    color: var(--color-text-primary);
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 10px 12px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--color-text-primary);
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s;
+    line-height: 1.5;
+  }
+
+  textarea:focus { border-color: var(--color-border-secondary); }
+
+  .key-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 8px 12px;
+  }
+
+  .key-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: #1D9E75;
+    letter-spacing: 0.06em;
+  }
+
+  .key-val {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--color-text-primary);
+    flex: 1;
+    letter-spacing: 0.04em;
+  }
+
+  .lock-icon { font-size: 12px; }
+
+  .upload-zone {
+    border: 0.5px dashed var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 2rem 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--color-background-secondary);
+    position: relative;
+  }
+
+  .upload-zone:hover { border-color: var(--color-border-primary); }
+
+  .upload-zone input {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+
+  .upload-icon { font-size: 24px; margin-bottom: 8px; }
+
+  .upload-text {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+  }
+
+  .upload-hint {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--color-text-tertiary);
+    margin-top: 4px;
+  }
+
+  .img-preview {
+    width: 100%; max-height: 200px; object-fit: contain;
+    border-radius: var(--border-radius-md);
+    border: 0.5px solid var(--color-border-tertiary);
+    display: none;
+  }
+
+  .btn-run {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--border-radius-md);
+    border: none;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.15s;
+    background: var(--color-text-primary);
+    color: var(--color-background-primary);
+  }
+
+  .btn-run:hover { opacity: 0.85; }
+  .btn-run:active { transform: scale(0.98); }
+  .btn-run:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .terminal {
+    background: #0a0e0c;
+    border: 0.5px solid #1D9E75;
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    font-family: var(--mono);
+    font-size: 12px;
+    min-height: 80px;
+    color: #9FE1CB;
+    line-height: 1.8;
+    overflow-x: auto;
+  }
+
+  .t-prompt { color: #1D9E75; }
+  .t-dim { color: #5DCAA5; opacity: 0.6; }
+  .t-success { color: #9FE1CB; }
+  .t-hex { color: #0F6E56; word-break: break-all; }
+  .t-final { color: #E1F5EE; font-weight: 700; }
+  .t-err { color: #F09595; }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 0.5px solid var(--color-border-tertiary);
+    color: var(--color-text-secondary);
+  }
+
+  .status-pill.ok { border-color: #0F6E56; color: #1D9E75; background: rgba(29,158,117,0.06); }
+  .status-pill.err { border-color: #A32D2D; color: #E24B4A; background: rgba(226,75,74,0.06); }
+  .status-pill.run { border-color: var(--color-border-secondary); }
+
+  .spin {
+    width: 10px; height: 10px;
+    border: 1.5px solid currentColor;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .step-bar {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .step {
+    flex: 1;
+    height: 2px;
+    background: var(--color-border-tertiary);
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+
+  .step.done { background: #1D9E75; }
+  .step.active { background: #5DCAA5; }
+
+  .stego-compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .img-box {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 8px;
+    text-align: center;
+  }
+
+  .img-box img {
+    width: 100%; max-height: 120px; object-fit: contain;
+    border-radius: 4px;
+  }
+
+  .img-box-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--color-text-tertiary);
+    margin-top: 6px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 1rem;
+  }
+
+  .info-card {
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-md);
+    padding: 10px 12px;
+  }
+
+  .info-card-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.07em;
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+  }
+
+  .info-card-val {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-top: 2px;
+  }
+
+  .info-card-val.green { color: #1D9E75; }
+
+  .section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+  }
+
+  .about-block {
+    background: var(--color-background-secondary);
+    border-left: 2px solid #1D9E75;
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+  }
+
+  .about-q {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: #1D9E75;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+  }
+
+  .about-a {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+</style>
+
+<div class="shell">
+  <div class="header">
+    <div class="badge"><div class="dot"></div> AES + LSB · Dual-Layer Security</div>
+    <h1>Stego<span>Cipher</span></h1>
+    <p class="subtitle">Encrypt → Hide → Recover · Python Project Demo</p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-icon">✍️</div>
+      <div class="flow-label">Message</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon">🔐</div>
+      <div class="flow-label">AES Enc</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon">🖼️</div>
+      <div class="flow-label">LSB Embed</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon">📤</div>
+      <div class="flow-label">Stego PNG</div>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon">🔓</div>
+      <div class="flow-label">Recover</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('embed')">↓ Embed</button>
+    <button class="tab" onclick="switchTab('extract')">↑ Extract</button>
+    <button class="tab" onclick="switchTab('about')">? About</button>
+  </div>
+
+  <!-- EMBED PANEL -->
+  <div class="panel active" id="panel-embed">
+    <div class="step-bar">
+      <div class="step done" id="s1"></div>
+      <div class="step" id="s2"></div>
+      <div class="step" id="s3"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">01 · Secret Message</div>
+      <textarea id="msg" rows="3" placeholder="Type your secret message here...">Hello Rajnandini!</textarea>
+    </div>
+
+    <div class="card">
+      <div class="card-label">02 · AES Key (16 bytes)</div>
+      <div class="key-row">
+        <span class="key-tag">KEY</span>
+        <span class="key-val" id="key-display">1234567890123456</span>
+        <span class="lock-icon">🔒</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">03 · Carrier Image</div>
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" accept="image/png,image/jpeg" onchange="handleUpload(this)">
+        <div class="upload-icon">🖼️</div>
+        <div class="upload-text">Drop your input.png here</div>
+        <div class="upload-hint">PNG · JPG supported</div>
+      </div>
+      <img class="img-preview" id="img-preview" alt="carrier">
+    </div>
+
+    <button class="btn-run" id="btn-embed" onclick="runEmbed()">▶ RUN EMBED SIMULATION</button>
+
+    <div style="margin-top: 1rem;" id="embed-output" style="display:none"></div>
+  </div>
+
+  <!-- EXTRACT PANEL -->
+  <div class="panel" id="panel-extract">
+    <div class="card">
+      <div class="card-label">Stego Image</div>
+      <div class="upload-zone" id="upload-zone-x">
+        <input type="file" accept="image/png" onchange="handleUploadX(this)">
+        <div class="upload-icon">📂</div>
+        <div class="upload-text">Load your stego.png</div>
+        <div class="upload-hint">The output from embed step</div>
+      </div>
+      <img class="img-preview" id="img-preview-x" alt="stego">
+    </div>
+    <button class="btn-run" id="btn-extract" onclick="runExtract()">▶ RUN EXTRACT SIMULATION</button>
+    <div style="margin-top: 1rem;" id="extract-output"></div>
+  </div>
+
+  <!-- ABOUT PANEL -->
+  <div class="panel" id="panel-about">
+    <div class="about-block">
+      <div class="about-q">What is AES?</div>
+      <div class="about-a">AES (Advanced Encryption Standard) is a symmetric key encryption algorithm. It encrypts your message using a 16-byte key so that it becomes unreadable ciphertext.</div>
+    </div>
+    <div class="about-block">
+      <div class="about-q">What is LSB Steganography?</div>
+      <div class="about-a">LSB (Least Significant Bit) replaces the last bit of each pixel's R, G, B channel with one bit of the hidden message. This change is invisible to the human eye.</div>
+    </div>
+    <div class="about-block">
+      <div class="about-q">Why combine both?</div>
+      <div class="about-a">Encryption alone reveals a message exists. Steganography alone isn't secure. Combined, the data is both unreadable AND undetectable — dual-layer protection.</div>
+    </div>
+    <div class="about-block">
+      <div class="about-q">Flow</div>
+      <div class="about-a">Message → AES Encrypt → hex string → binary → LSB into pixels → stego.png<br>stego.png → extract bits → hex → AES Decrypt → original message</div>
+    </div>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-card-label">Algorithm</div>
+        <div class="info-card-val">AES-ECB</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Key size</div>
+        <div class="info-card-val">128 bit</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Embed method</div>
+        <div class="info-card-val" style="font-size:13px">LSB RGB</div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-label">Security</div>
+        <div class="info-card-val green">Dual ✓</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', ['embed','extract','about'][i] === name);
+  });
+  document.querySelectorAll('.panel').forEach((p, i) => {
+    p.classList.toggle('active', ['panel-embed','panel-extract','panel-about'][i] === 'panel-'+name);
+  });
+}
+
+let uploadedImg = null;
+let uploadedImgX = null;
+
+function handleUpload(input) {
+  if (!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    uploadedImg = e.target.result;
+    const prev = document.getElementById('img-preview');
+    prev.src = uploadedImg;
+    prev.style.display = 'block';
+    document.getElementById('upload-zone').style.display = 'none';
+    updateSteps(2);
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function handleUploadX(input) {
+  if (!input.files[0]) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    uploadedImgX = e.target.result;
+    const prev = document.getElementById('img-preview-x');
+    prev.src = uploadedImgX;
+    prev.style.display = 'block';
+    document.getElementById('upload-zone-x').style.display = 'none';
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+
+function updateSteps(n) {
+  for (let i = 1; i <= 3; i++) {
+    const el = document.getElementById('s' + i);
+    if (i < n) el.className = 'step done';
+    else if (i === n) el.className = 'step active';
+    else el.className = 'step';
+  }
+}
+
+function simAES(msg) {
+  let result = '';
+  for (let i = 0; i < 32; i++) {
+    result += Math.floor(Math.random() * 16).toString(16);
+  }
+  return result;
+}
+
+function simBinary(hexStr) {
+  return hexStr.split('').slice(0,16).map(c => parseInt(c,16).toString(2).padStart(4,'0')).join('') + '...';
+}
+
+function runEmbed() {
+  const msg = document.getElementById('msg').value.trim();
+  if (!msg) return;
+  if (!uploadedImg) {
+    showEmbedOutput(`<div class="terminal"><span class="t-err">✗ No carrier image loaded. Upload input.png first.</span></div>`);
+    return;
+  }
+
+  const btn = document.getElementById('btn-embed');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Processing...';
+  updateSteps(3);
+
+  const enc = simAES(msg);
+  const bin = simBinary(enc);
+  const msgLen = msg.length;
+  const bitsNeeded = (32 + enc.length * 8);
+
+  setTimeout(() => {
+    showEmbedOutput(`
+      <div class="terminal">
+        <div><span class="t-prompt">$</span> python project.py</div>
+        <div class="t-dim">► AES encrypting: "${msg}"</div>
+        <div class="t-dim">► Key: 1234567890123456 (128-bit)</div>
+        <div><span class="t-prompt">»</span> Ciphertext (hex): <span class="t-hex">${enc}</span></div>
+        <div class="t-dim">► Binary repr: ${bin}</div>
+        <div class="t-dim">► Bits to embed: ${bitsNeeded} bits (${Math.ceil(bitsNeeded/3)} pixels used)</div>
+        <div class="t-dim">► Writing LSBs into R/G/B channels...</div>
+        <div class="t-success">✓ Embedded Successfully!</div>
+        <div class="t-dim">► Saved → stego.png</div>
+      </div>
+
+      <div class="info-grid" style="margin-top:0.75rem;">
+        <div class="info-card">
+          <div class="info-card-label">Message chars</div>
+          <div class="info-card-val">${msgLen}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Encrypted hex</div>
+          <div class="info-card-val">${enc.length} chars</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Bits embedded</div>
+          <div class="info-card-val">${bitsNeeded}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Status</div>
+          <div class="info-card-val green">OK ✓</div>
+        </div>
+      </div>
+
+      <div class="stego-compare" style="margin-top:0.75rem;">
+        <div class="img-box">
+          <img src="${uploadedImg}" alt="original">
+          <div class="img-box-label">input.png · original</div>
+        </div>
+        <div class="img-box" style="border-color:#0F6E56;">
+          <img src="${uploadedImg}" alt="stego" style="filter: hue-rotate(2deg) brightness(1.002);">
+          <div class="img-box-label" style="color:#1D9E75;">stego.png · hidden data ✓</div>
+        </div>
+      </div>
+    `);
+    btn.disabled = false;
+    btn.innerHTML = '✓ EMBED COMPLETE — RUN AGAIN';
+  }, 1800);
+}
+
+function showEmbedOutput(html) {
+  const out = document.getElementById('embed-output');
+  out.style.display = 'block';
+  out.innerHTML = html;
+}
+
+function runExtract() {
+  const btn = document.getElementById('btn-extract');
+  const out = document.getElementById('extract-output');
+
+  if (!uploadedImgX) {
+    out.innerHTML = `<div class="terminal"><span class="t-err">✗ No stego image loaded.</span></div>`;
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Extracting...';
+
+  const enc = simAES('extracted');
+
+  setTimeout(() => {
+    out.innerHTML = `
+      <div class="terminal">
+        <div><span class="t-prompt">$</span> python project.py</div>
+        <div class="t-dim">► Reading pixel LSBs from stego.png...</div>
+        <div class="t-dim">► First 32 bits → message length header</div>
+        <div><span class="t-prompt">»</span> Extracted hex: <span class="t-hex">${enc}</span></div>
+        <div class="t-dim">► AES decrypting with key: 1234567890123456</div>
+        <div class="t-success">✓ Recovered Message: <span class="t-final">Hello Rajnandini!</span></div>
+      </div>
+      <div class="info-grid" style="margin-top:0.75rem;">
+        <div class="info-card">
+          <div class="info-card-label">Extracted bytes</div>
+          <div class="info-card-val">${enc.length/2}</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Decryption</div>
+          <div class="info-card-val green">Success</div>
+        </div>
+      </div>
+    `;
+    btn.disabled = false;
+    btn.innerHTML = '✓ EXTRACT COMPLETE';
+  }, 1600);
+}
+
+document.getElementById('msg').addEventListener('input', function() {
+  updateSteps(this.value.trim() ? 2 : 1);
+});
+</script>
